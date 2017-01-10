@@ -1,0 +1,3 @@
+module SynergyWholesale
+
+end
