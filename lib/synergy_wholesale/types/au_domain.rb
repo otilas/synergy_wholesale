@@ -1,6 +1,6 @@
 module SynergyWholesale
   module Types
-    class AuDomain < Dry::Struct
+    class AuDomain < ::Dry::Struct
       attribute :name, Types::Strict::String.constrained(format: /\.au\z/)
 
       def to_param

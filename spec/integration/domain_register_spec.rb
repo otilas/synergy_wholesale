@@ -2,7 +2,7 @@ require 'savon/mock/spec_helper'
 
 module SynergyWholesale
 
-  RSpec.describe DomainRegisterAu do
+  RSpec.describe DomainRegister do
     include Savon::SpecHelper
 
     # set Savon in and out of mock mode
@@ -14,16 +14,16 @@ module SynergyWholesale
       { request: core_params.merge(params) }
     end
 
-    describe 'DomainRegisterAu' do
+    describe 'DomainRegister' do
       context 'with valid parameters' do
 
         it 'registers the domain' do
-          fixture = File.read('spec/fixtures/synergy/domain/register/au/success.xml')
+          fixture = File.read('spec/fixtures/synergy/domain/register/success.xml')
 
-          domain             = { name: 'bobsburgers.com.au' }
-          years              = { years: 2 }
-          name_servers       = { domain_list: %w(ns1.example.com ns2.example.com) }
-          registrant_contact = {
+          domain       = { name: 'bobsburgers.com' }
+          years        = { years: 2 }
+          name_servers = { domain_list: %w(ns1.example.com ns2.example.com) }
+          contact      = {
             firstname:    'Bob',
             lastname:     'Belcher',
             organisation: "Bob's Burgers",
@@ -33,47 +33,27 @@ module SynergyWholesale
             country:      'AU',
             postcode:     '4123',
             phone:        '+61.0751234567',
-            email:        'bob@bobsburgers.com.au',
-            type:         :registrant
-          }
-          technical_contact  = {
-            firstname:    'Bob',
-            lastname:     'Belcher',
-            organisation: "Bob's Burgers",
-            address:      ['123 Ocean Avenue'],
-            suburb:       "Seymour's Bay",
-            state:        'QLD',
-            country:      'AU',
-            postcode:     '4123',
-            phone:        '+61.0751234567',
-            email:        'bob@bobsburgers.com.au',
-            type:         :technical
-          }
-          registrant         = {
-            registrant_name:     "Bob's Burgers Pty Ltd",
-            registrant_id:       '12345678912',
-            registrant_id_type:  'ABN',
-            eligibility_type:    'Company',
-            eligibility_name:    "Bob's Burgers Pty Ltd",
-            eligibility_id_type: 'ABN',
-            eligibility_id:      '12345678912'
+            email:        'bob@bobsburgers.com.au'
           }
 
           attributes = {
             domain:             domain,
             years:              years,
             name_servers:       Types::DomainList.build(name_servers),
-            registrant_contact: Types::AuContact.build(registrant_contact),
-            technical_contact:  Types::AuContact.build(technical_contact),
-            registrant:         Types::AuRegistrant.build(registrant)
+            registrant_contact: Types::Contact.build(contact.merge(type: :registrant)),
+            technical_contact:  Types::Contact.build(contact.merge(type: :technical)),
+            billing_contact:    Types::Contact.build(contact.merge(type: :billing)),
+            admin_contact:      Types::Contact.build(contact.merge(type: :admin)),
+            id_protect:         false
           }
 
           savon
-            .expects(:domain_register_au)
+            .expects(:domain_register)
             .with(
               message: message(
                          {
-                           domain_name:              'bobsburgers.com.au',
+                           id_protect:               '',
+                           domain_name:              'bobsburgers.com',
                            years:                    '2',
                            name_servers:             { item: %w(ns1.example.com ns2.example.com), '@xsi:type' => 'enc:Array' },
                            'registrant_lastname'     => 'Belcher',
@@ -98,20 +78,35 @@ module SynergyWholesale
                            'technical_phone'         => '+61.0751234567',
                            'technical_fax'           => '',
                            'technical_email'         => 'bob@bobsburgers.com.au',
-                           'registrantName'          => "Bob's Burgers Pty Ltd",
-                           'registrantID'            => '12345678912',
-                           'registrantIDType'        => 'ABN',
-                           'eligibilityID'           => '12345678912',
-                           'eligibilityIDType'       => 'ABN',
-                           'eligibilityName'         => "Bob's Burgers Pty Ltd",
-                           'eligibilityType'         => 'Company'
+                           'billing_lastname'        => 'Belcher',
+                           'billing_firstname'       => 'Bob',
+                           'billing_organisation'    => "Bob's Burgers",
+                           'billing_address'         => { item: ['123 Ocean Avenue'], '@xsi:type' => 'enc:Array' },
+                           'billing_suburb'          => "Seymour's Bay",
+                           'billing_state'           => 'QLD',
+                           'billing_country'         => 'AU',
+                           'billing_postcode'        => '4123',
+                           'billing_phone'           => '+61.0751234567',
+                           'billing_fax'             => '',
+                           'billing_email'           => 'bob@bobsburgers.com.au',
+                           'admin_lastname'          => 'Belcher',
+                           'admin_firstname'         => 'Bob',
+                           'admin_organisation'      => "Bob's Burgers",
+                           'admin_address'           => { item: ['123 Ocean Avenue'], '@xsi:type' => 'enc:Array' },
+                           'admin_suburb'            => "Seymour's Bay",
+                           'admin_state'             => 'QLD',
+                           'admin_country'           => 'AU',
+                           'admin_postcode'          => '4123',
+                           'admin_phone'             => '+61.0751234567',
+                           'admin_fax'               => '',
+                           'admin_email'             => 'bob@bobsburgers.com.au'
                          }
                        )
             )
             .returns(fixture)
 
 
-          expect(DomainRegisterAu.call(attributes)).to be_successful
+          expect(DomainRegister.call(attributes)).to be_successful
         end
 
       end
@@ -119,12 +114,12 @@ module SynergyWholesale
       context 'with invalid parameters' do
 
         it 'returns an error' do
-          fixture = File.read('spec/fixtures/synergy/domain/register/au/failure.xml')
+          fixture = File.read('spec/fixtures/synergy/domain/register/failure.xml')
 
-          domain             = { name: 'google.com.au' }
-          years              = { years: 2 }
-          name_servers       = { domain_list: %w(ns1.example.com ns2.example.com) }
-          registrant_contact = {
+          domain       = { name: 'google.com' }
+          years        = { years: 2 }
+          name_servers = { domain_list: %w(ns1.example.com ns2.example.com) }
+          contact      = {
             firstname:    'Bob',
             lastname:     'Belcher',
             organisation: "Bob's Burgers",
@@ -134,47 +129,27 @@ module SynergyWholesale
             country:      'AU',
             postcode:     '4123',
             phone:        '+61.0751234567',
-            email:        'bob@bobsburgers.com.au',
-            type:         :registrant
-          }
-          technical_contact  = {
-            firstname:    'Bob',
-            lastname:     'Belcher',
-            organisation: "Bob's Burgers",
-            address:      ['123 Ocean Avenue'],
-            suburb:       "Seymour's Bay",
-            state:        'QLD',
-            country:      'AU',
-            postcode:     '4123',
-            phone:        '+61.0751234567',
-            email:        'bob@bobsburgers.com.au',
-            type:         :technical
-          }
-          registrant         = {
-            registrant_name:     "Bob's Burgers Pty Ltd",
-            registrant_id:       '12345678912',
-            registrant_id_type:  'ABN',
-            eligibility_type:    'Company',
-            eligibility_name:    "Bob's Burgers Pty Ltd",
-            eligibility_id_type: 'ABN',
-            eligibility_id:      '12345678912'
+            email:        'bob@bobsburgers.com.au'
           }
 
           attributes = {
             domain:             domain,
             years:              years,
             name_servers:       Types::DomainList.build(name_servers),
-            registrant_contact: Types::AuContact.build(registrant_contact),
-            technical_contact:  Types::AuContact.build(technical_contact),
-            registrant:         Types::AuRegistrant.build(registrant)
+            registrant_contact: Types::Contact.build(contact.merge(type: :registrant)),
+            technical_contact:  Types::Contact.build(contact.merge(type: :technical)),
+            billing_contact:    Types::Contact.build(contact.merge(type: :billing)),
+            admin_contact:      Types::Contact.build(contact.merge(type: :admin)),
+            id_protect:         false
           }
 
           savon
-            .expects(:domain_register_au)
+            .expects(:domain_register)
             .with(
               message: message(
                          {
-                           domain_name:              'google.com.au',
+                           id_protect:               '',
+                           domain_name:              'google.com',
                            years:                    '2',
                            name_servers:             { item: %w(ns1.example.com ns2.example.com), '@xsi:type' => 'enc:Array' },
                            'registrant_lastname'     => 'Belcher',
@@ -199,23 +174,38 @@ module SynergyWholesale
                            'technical_phone'         => '+61.0751234567',
                            'technical_fax'           => '',
                            'technical_email'         => 'bob@bobsburgers.com.au',
-                           'registrantName'          => "Bob's Burgers Pty Ltd",
-                           'registrantID'            => '12345678912',
-                           'registrantIDType'        => 'ABN',
-                           'eligibilityID'           => '12345678912',
-                           'eligibilityIDType'       => 'ABN',
-                           'eligibilityName'         => "Bob's Burgers Pty Ltd",
-                           'eligibilityType'         => 'Company'
+                           'billing_lastname'        => 'Belcher',
+                           'billing_firstname'       => 'Bob',
+                           'billing_organisation'    => "Bob's Burgers",
+                           'billing_address'         => { item: ['123 Ocean Avenue'], '@xsi:type' => 'enc:Array' },
+                           'billing_suburb'          => "Seymour's Bay",
+                           'billing_state'           => 'QLD',
+                           'billing_country'         => 'AU',
+                           'billing_postcode'        => '4123',
+                           'billing_phone'           => '+61.0751234567',
+                           'billing_fax'             => '',
+                           'billing_email'           => 'bob@bobsburgers.com.au',
+                           'admin_lastname'          => 'Belcher',
+                           'admin_firstname'         => 'Bob',
+                           'admin_organisation'      => "Bob's Burgers",
+                           'admin_address'           => { item: ['123 Ocean Avenue'], '@xsi:type' => 'enc:Array' },
+                           'admin_suburb'            => "Seymour's Bay",
+                           'admin_state'             => 'QLD',
+                           'admin_country'           => 'AU',
+                           'admin_postcode'          => '4123',
+                           'admin_phone'             => '+61.0751234567',
+                           'admin_fax'               => '',
+                           'admin_email'             => 'bob@bobsburgers.com.au'
                          }
                        )
             )
             .returns(fixture)
 
           expect {
-            DomainRegisterAu.call(attributes)
+            DomainRegister.call(attributes)
           }.to raise_exception(
                  SynergyWholesale::Errors::ResponseError,
-                 'Domain Register AU Failed - Domain Not Available To Register'
+                 'Domain Register Failed - Domain Not Available To Register'
                )
         end
 

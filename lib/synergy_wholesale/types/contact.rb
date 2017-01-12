@@ -15,6 +15,25 @@ module SynergyWholesale
       attribute :email, Types::Email
       attribute :type, Types::Strict::Symbol.constrained(included_in: %i(billing admin technical registrant))
 
+      def self.build(attributes)
+        new(
+          {
+            firstname:    attributes[:firstname],
+            lastname:     attributes[:lastname],
+            organisation: attributes[:organisation],
+            address:      attributes[:address],
+            suburb:       attributes[:suburb],
+            state:        attributes[:state],
+            country:      { country_code: attributes[:country] },
+            postcode:     attributes[:postcode],
+            phone:        { phone: attributes[:phone] },
+            fax:          attributes[:fax] ? { phone: attributes[:fax] } : nil,
+            email:        { email: attributes[:email] },
+            type:         attributes[:type]
+          }
+        )
+      end
+
       def to_param
         {
           prefixed(:lastname)     => lastname,
