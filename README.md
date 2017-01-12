@@ -25,11 +25,21 @@ SynergyWholesale.setup do |config|
   config.api_key = 'abc123'
 end
 
+# call an operation
+response = SynergyWholesale::CheckDomain.call(domain: { name: 'example.com'})
+
+response.body
+# => { status: 'UNAVAILABLE', available: '0' }
+
+response.is_available?
+# => false
+
+# Or do things manually
 # create an instance of the api adapter
 api = SynergyWholesale::API.new
 
 # create a command
-command = Commands::CheckDomain.new(Entities::Domain.new('example.com'))
+command = SynergyWholesale::CheckDomain::Command.new(SynergyWholesale::Types::Domain.new(name: 'example.com'))
 
 command.to_param
 # => { domain_name: 'example.com' }
