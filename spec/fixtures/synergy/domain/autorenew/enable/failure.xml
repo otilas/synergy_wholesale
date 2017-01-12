@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:WholesaleSystem">
+  <SOAP-ENV:Body>
+    <ns1:enableAutoRenewalResponse xmlns:ns1="urn:WholesaleSystem">
+      <return xsi:type="tns:enableAutoRenewalResponse">
+        <status xsi:type="xsd:string">ERR_RESELLER_NOT_AUTHORISED</status>
+        <errorMessage xsi:type="xsd:string">Reseller is not authorized to perform any functions on this domain</errorMessage>
+      </return>
+    </ns1:enableAutoRenewalResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

@@ -15,3 +15,4 @@ module SynergyWholesale
 end
 
 require_relative 'operations/check_domain'
+require_relative 'operations/enable_auto_renewal'
