@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"
+                   xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="urn:WholesaleSystem">
+  <SOAP-ENV:Body>
+    <ns1:domainRegisterAUResponse xmlns:ns1="urn:WholesaleSystem">
+      <return xsi:type="tns:domainRegisterAU">
+        <errorMessage xsi:type="xsd:string">Domain Register AU Failed - Domain Not Available To Register</errorMessage>
+        <status xsi:type="xsd:string">ERR_DOMAINREGISTERAU_FAILED</status>
+      </return>
+    </ns1:domainRegisterAUResponse>
+  </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

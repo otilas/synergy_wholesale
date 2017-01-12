@@ -1,19 +1,38 @@
 module SynergyWholesale
   module Types
-    class Contact < Dry::Struct
+    class AuContact < Dry::Struct
       attribute :organisation, Types::Strict::String.optional
       attribute :firstname, Types::Strict::String
       attribute :lastname, Types::Strict::String
       attribute :address, Types::Strict::Array.constrained(filled: true)
       attribute :suburb, Types::Strict::String
-      attribute :state, Types::Strict::String
-      attribute :postcode, Types::Strict::String
 
+      attribute :state, Types::AuState
+      attribute :postcode, Types::AuPostcode
       attribute :country, Types::Country
       attribute :phone, Types::Phone
       attribute :fax, Types::Phone.optional
       attribute :email, Types::Email
       attribute :type, Types::Strict::Symbol.constrained(included_in: %i(billing admin technical registrant))
+
+      def self.build(attributes)
+        new(
+          {
+            firstname:    attributes[:firstname],
+            lastname:     attributes[:lastname],
+            organisation: attributes[:organisation],
+            address:      attributes[:address],
+            suburb:       attributes[:suburb],
+            state:        { state: attributes[:state] },
+            country:      { country_code: attributes[:country] },
+            postcode:     { postcode: attributes[:postcode] },
+            phone:        { phone: attributes[:phone] },
+            fax:          attributes[:fax] ? { phone: attributes[:fax] } : nil,
+            email:        { email: attributes[:email] },
+            type:         attributes[:type]
+          }
+        )
+      end
 
       def to_param
         {

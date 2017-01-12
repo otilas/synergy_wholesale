@@ -17,3 +17,4 @@ end
 require_relative 'operations/check_domain'
 require_relative 'operations/enable_auto_renewal'
 require_relative 'operations/disable_auto_renewal'
+require_relative 'operations/domain_register_au'

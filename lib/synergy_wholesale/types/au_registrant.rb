@@ -10,6 +10,20 @@ module SynergyWholesale
       attribute :eligibility_type, Types::AuOrganisationType
       attribute :eligibility_id_type, Types::AuIDType.optional
 
+      def self.build(attributes)
+        new(
+          {
+            registrant_name:     attributes[:registrant_name],
+            registrant_id:       attributes[:registrant_id],
+            registrant_id_type:  { id_type: attributes[:registrant_id_type] },
+            eligibility_type:    { organisation_type: attributes[:eligibility_type] },
+            eligibility_name:    attributes[:eligibility_name],
+            eligibility_id_type: { id_type: attributes[:eligibility_id_type] },
+            eligibility_id:      attributes[:eligibility_id]
+          }
+        )
+      end
+
       def to_param
         {
           'registrantName'    => registrant_name,
