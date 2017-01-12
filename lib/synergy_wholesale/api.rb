@@ -18,7 +18,7 @@ module SynergyWholesale
     def call(command)
       adapter.add_params(command.to_param)
       command_name = command.class.name
-      soap_command = Inflector.underscore(Inflector.demodulize(command_name)).to_sym
+      soap_command = command.operation
 
       savon_response = adapter.call(soap_command)
       response       = savon_response.body["#{soap_command}_response".to_sym][:return]

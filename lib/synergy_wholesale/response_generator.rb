@@ -10,7 +10,7 @@ module SynergyWholesale
     protected
 
     def get_response_class(command_name)
-      response_class = command_name.gsub('Commands', 'Responses')
+      response_class = command_name.gsub('Command', 'Response')
       Inflector.constantize(response_class)
     end
 

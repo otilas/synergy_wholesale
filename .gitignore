@@ -3,6 +3,7 @@ coverage
 /.bundle
 vendor/bundle
 bin/
+!bin/console
 tmp/
 .idea/
 Gemfile.lock
