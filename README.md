@@ -1,4 +1,11 @@
+[gem]: https://badge.fury.io/rb/synergy_wholesale
+[travis]: https://travis-ci.org/robjacoby/synergy_wholesale
+[gemnasium]: https://gemnasium.com/robjacoby/synergy_wholesale
+
 # synergy_wholesale
+[![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
+[![Build Status](https://travis-ci.org/dry-rb/dry-validation.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/dry-rb/dry-validation.svg)][gemnasium]
 
 ## Installation
 
