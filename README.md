@@ -3,9 +3,9 @@
 [gemnasium]: https://gemnasium.com/robjacoby/synergy_wholesale
 
 # synergy_wholesale
-[![Gem Version](https://badge.fury.io/rb/dry-validation.svg)][gem]
-[![Build Status](https://travis-ci.org/dry-rb/dry-validation.svg?branch=master)][travis]
-[![Dependency Status](https://gemnasium.com/dry-rb/dry-validation.svg)][gemnasium]
+[![Gem Version](https://badge.fury.io/rb/synergy_wholesale.svg)][gem]
+[![Build Status](https://travis-ci.org/robjacoby/synergy_wholesale.svg?branch=master)][travis]
+[![Dependency Status](https://gemnasium.com/robjacoby/synergy_wholesale.svg)][gemnasium]
 
 ## Installation
 
